@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIPLA Cardiac Opportunity Prioritizer</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <i class="fa-solid fa-heart-pulse logo-icon"></i>
+                    <div class="logo-text">
+                        <span class="logo-title">Cipla</span>
+                        <span class="logo-subtitle">CARDIAC AGENT</span>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <button class="nav-item active" data-tab="dashboard">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>Prioritizer</span>
+                </button>
+                <button class="nav-item" data-tab="reasoning">
+                    <i class="fa-solid fa-brain"></i>
+                    <span>LLM Agent Audit Log</span>
+                </button>
+                <button class="nav-item" data-tab="portfolio">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Strategic Portfolio</span>
+                </button>
+                <button class="nav-item" data-tab="pitch">
+                    <i class="fa-solid fa-file-powerpoint"></i>
+                    <span>Executive Pitch</span>
+                </button>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="agent-status-badge">
+                    <div class="status-indicator online"></div>
+                    <span>Agent: DYNAMIC REACTIVE</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="content-header">
+                <div class="header-left">
+                    <h1 id="page-title">Opportunity Prioritizer</h1>
+                    <p id="page-subtitle" class="text-muted">Simulate and rank cardiac investment spaces based on dynamic weights</p>
+                </div>
+            </header>
+
+            <!-- TABS CONTAINER -->
+            <div class="tab-content-container">
+                
+                <!-- TAB 1: PRIORITIZER DASHBOARD -->
+                <section class="tab-content active" id="tab-dashboard">
+                    <div class="dashboard-layout">
+                        <!-- Left Panel: Controls & Table & Chart -->
+                        <div class="left-panel">
+                            <!-- Sliders Control Card -->
+                            <div class="glass-card slider-controls-card">
+                                <div class="card-header-row">
+                                    <div class="card-title-group">
+                                        <h3><i class="fa-solid fa-sliders header-icon"></i> Dynamic Weight Simulation Controls</h3>
+                                        <p class="card-subtitle">Adjust market parameters to dynamically simulate & re-score 193 opportunity spaces</p>
+                                    </div>
+                                    <span class="badge badge-strategy-pill" id="strategy-mode-badge">
+                                        <i class="fa-solid fa-compass"></i> Strategy Mode: Growth-Focused
+                                    </span>
+                                </div>
+                                <div class="card-divider"></div>
+                                <div class="sliders-grid">
+                                    <div class="slider-wrapper">
+                                        <div class="slider-header">
+                                            <label for="weight-size">
+                                                <span class="slider-title"><i class="fa-solid fa-chart-pie slider-icon"></i> Market Size</span>
+                                                <span id="val-size" class="weight-display-pill">20%</span>
+                                            </label>
+                                        </div>
+                                        <input type="range" id="weight-size" min="0" max="100" value="20" class="custom-slider">
+                                    </div>
+                                    <div class="slider-wrapper">
+                                        <div class="slider-header">
+                                            <label for="weight-growth">
+                                                <span class="slider-title"><i class="fa-solid fa-arrow-trend-up slider-icon"></i> Market Growth</span>
+                                                <span id="val-growth" class="weight-display-pill">40%</span>
+                                            </label>
+                                        </div>
+                                        <input type="range" id="weight-growth" min="0" max="100" value="40" class="custom-slider">
+                                    </div>
+                                    <div class="slider-wrapper">
+                                        <div class="slider-header">
+                                            <label for="weight-comp">
+                                                <span class="slider-title"><i class="fa-solid fa-shield-cat slider-icon"></i> Competition HHI</span>
+                                                <span id="val-comp" class="weight-display-pill">15%</span>
+                                            </label>
+                                        </div>
+                                        <input type="range" id="weight-comp" min="0" max="100" value="15" class="custom-slider">
+                                    </div>
+                                    <div class="slider-wrapper">
+                                        <div class="slider-header">
+                                            <label for="weight-rtw">
+                                                <span class="slider-title"><i class="fa-solid fa-award slider-icon"></i> CIPLA Right to Win</span>
+                                                <span id="val-rtw" class="weight-display-pill">25%</span>
+                                            </label>
+                                        </div>
+                                        <input type="range" id="weight-rtw" min="0" max="100" value="25" class="custom-slider">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Top Opportunities Visual Chart -->
+                            <div class="glass-card chart-card">
+                                <div class="card-header-row">
+                                    <div class="card-title-group">
+                                        <h3><i class="fa-solid fa-chart-bar header-icon"></i> Real-Time Top 5 Opportunity Scores</h3>
+                                        <p class="card-subtitle">Live leaderboard of top molecules recalculated instantly</p>
+                                    </div>
+                                    <span class="badge badge-subtle-blue"><i class="fa-solid fa-bolt"></i> Live Weighted Rank</span>
+                                </div>
+                                <div class="card-divider"></div>
+                                <div class="chart-container-wrapper">
+                                    <canvas id="topMoleculesChart"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Table Card -->
+                            <div class="glass-card table-card">
+                                <div class="table-header-row">
+                                    <div class="card-title-group">
+                                        <h3><i class="fa-solid fa-list-ol header-icon"></i> Ranked Opportunity Spaces <span class="count-badge" id="active-count-badge">193 Active Molecules</span></h3>
+                                    </div>
+                                    <div class="table-filters">
+                                        <div class="search-box">
+                                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                                            <input type="text" id="search-input" placeholder="Search molecule...">
+                                        </div>
+                                        <select id="cluster-filter" class="custom-select">
+                                            <option value="all">All Market Clusters</option>
+                                            <option value="Resistant Hypertension & Sympathetic Control">Resistant Hypertension</option>
+                                            <option value="Refractory Lipids & Intensive LDL-C Lowering">Refractory Lipids</option>
+                                            <option value="Diabetic Dyslipidemia & Metabolic Care">Diabetic Dyslipidemia</option>
+                                            <option value="Cardioprotective Calcium Blockade">Cardioprotective CCBs</option>
+                                        </select>
+                                        <select id="segment-filter" class="custom-select">
+                                            <option value="all">All Segments</option>
+                                            <option value="Anti Hypertensives">Hypertensives</option>
+                                            <option value="Lipid Regulators">Lipid Regulators</option>
+                                            <option value="Anti Angina">Anti Angina</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="card-divider"></div>
+                                
+                                <div class="table-scroll-container">
+                                    <table id="opportunities-table">
+                                        <thead>
+                                            <tr>
+                                                <th><i class="fa-solid fa-hashtag"></i> Rank</th>
+                                                <th><i class="fa-solid fa-capsules"></i> Molecule Name</th>
+                                                <th><i class="fa-solid fa-indian-rupee-sign"></i> Sales (Mn)</th>
+                                                <th><i class="fa-solid fa-chart-line"></i> CAGR</th>
+                                                <th><i class="fa-solid fa-percent"></i> CIPLA Share</th>
+                                                <th><i class="fa-solid fa-star"></i> Dynamic Score</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="opportunities-table-body">
+                                            <!-- Injected by JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Molecule Detailed Info & Dynamic LLM Reasoning -->
+                        <div class="right-panel">
+                            <div class="glass-card molecule-details-card sticky-card" id="detail-panel">
+                                <div class="detail-placeholder" id="detail-placeholder">
+                                    <div class="placeholder-icon-wrap">
+                                        <i class="fa-solid fa-brain placeholder-icon"></i>
+                                    </div>
+                                    <h3>Select an Opportunity Space</h3>
+                                    <p class="text-muted">Click any row in the ranked table to trigger live LLM trade-off re-synthesis, clinical trial evidence, and strategic recommendations.</p>
+                                </div>
+                                
+                                <div class="detail-content" id="detail-content" style="display:none;">
+                                    <!-- Clean Header -->
+                                    <div class="detail-header">
+                                        <div class="detail-badges-row">
+                                            <span class="badge badge-purple" id="detail-quadrant">Strategic Entry</span>
+                                            <span class="score-pill-header" id="detail-header-score">Score: 9.25 / 10</span>
+                                        </div>
+                                        <h2 id="detail-name" class="executive-molecule-title">BISOPROLOL FUMARATE + TELMISARTAN</h2>
+                                        
+                                        <div class="meta-chips-wrapper">
+                                            <span class="meta-pill"><i class="fa-solid fa-layer-group"></i> Cluster: <strong id="detail-cluster">Resistant Hypertension</strong></span>
+                                            <span class="meta-pill"><i class="fa-solid fa-prescription-bottle"></i> Archetype: <strong id="detail-archetype">Single-Pill Dual Action</strong></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Clean 3-Column Stats Row -->
+                                    <div class="executive-stats-row">
+                                        <div class="stat-col">
+                                            <span class="stat-value" id="detail-sales">₹138.8 Mn</span>
+                                            <span class="stat-label">Sales (Mn INR)</span>
+                                        </div>
+                                        <div class="stat-col">
+                                            <span class="stat-value text-green" id="detail-cagr">+92.9%</span>
+                                            <span class="stat-label">5-Yr CAGR</span>
+                                        </div>
+                                        <div class="stat-col">
+                                            <span class="stat-value text-purple" id="detail-cipla-share">0.47%</span>
+                                            <span class="stat-label">CIPLA Share</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Readable Strategic Rationale & Synthesis -->
+                                    <div class="details-section">
+                                        <h4 class="section-title"><i class="fa-solid fa-brain text-purple"></i> Strategic Rationale & Synthesis</h4>
+                                        <div class="rationale-box">
+                                            <div id="reason-breakdown" class="rationale-breakdown">
+                                                <span>Attractiveness: <strong>8.9/10</strong></span>
+                                                <span class="breakdown-sep">•</span>
+                                                <span>Competition: <strong>7.5/10</strong></span>
+                                                <span class="breakdown-sep">•</span>
+                                                <span>CIPLA RTW: <strong>6.5/10</strong></span>
+                                            </div>
+                                            
+                                            <div class="rationale-bullet-list">
+                                                <div class="rat-bullet-item">
+                                                    <i class="fa-solid fa-arrow-trend-up rat-bullet-icon text-green"></i>
+                                                    <p id="reason-tradeoff" class="rationale-paragraph">Growth-driven evaluation...</p>
+                                                </div>
+                                                <div class="rat-bullet-item">
+                                                    <i class="fa-solid fa-shield-halved rat-bullet-icon text-purple"></i>
+                                                    <p id="reason-rtw" class="rationale-paragraph">CIPLA holds zero direct share but can leverage parent Telma brand equity...</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Clean Clinical Evidence -->
+                                    <div class="details-section">
+                                        <h4 class="section-title"><i class="fa-solid fa-microscope text-purple"></i> Clinical Evidence & Trial Outcomes</h4>
+                                        <div class="clinical-evidence-box">
+                                            <div class="evidence-title"><i class="fa-solid fa-circle-check text-green"></i> <span id="detail-trend-name">Beta-1 + ARB Sympathetic Combo</span></div>
+                                            <p class="evidence-desc" id="detail-trend-desc">Demonstrated 92.9% CAGR growth due to post-COVID cardiac autonomic dysfunction prescribing.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Clean Brand Footprint List -->
+                                    <div class="details-section">
+                                        <h4 class="section-title"><i class="fa-solid fa-shop text-purple"></i> Brand Footprint</h4>
+                                        <div class="brands-simple-container">
+                                            <div class="brand-group">
+                                                <span class="brand-group-title">CIPLA Brands:</span>
+                                                <ul id="detail-cipla-brands" class="simple-brand-list"></ul>
+                                            </div>
+                                            <div class="brand-group">
+                                                <span class="brand-group-title">Competitors:</span>
+                                                <ul id="detail-competitor-brands" class="simple-brand-list"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Clean Recommendation Callout -->
+                                    <div class="details-section recommendation-section">
+                                        <div class="clean-recommendation-box">
+                                            <span class="recommendation-title"><i class="fa-solid fa-bullseye"></i> Strategic Recommendation</span>
+                                            <p id="detail-recommendation" class="recommendation-text">Urgent market entry required. Launch generic version or co-market. Highlight clinical superiority.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 2: DYNAMIC LLM AGENT AUDIT LOG & RESEARCH INSPECTOR -->
+                <section class="tab-content" id="tab-reasoning">
+                    <div class="audit-page-layout">
+                        <!-- Top Header Card -->
+                        <div class="glass-card audit-log-card">
+                            <div class="card-header-row">
+                                <h3><i class="fa-solid fa-terminal text-purple"></i> LLM Agent Execution & Secondary Research Inspector</h3>
+                                <span class="badge badge-green">Status: Live Ingested</span>
+                            </div>
+                            <p class="card-desc">Inspect the raw secondary research, landmark trials, ESC/AHA guidelines, and patent landscapes retrieved by the LLM Agent for all 14 ATC drug groups.</p>
+                            
+                            <!-- Interactive Class Research Inspector Dropdown -->
+                            <div class="inspector-controls">
+                                <label for="audit-class-select"><strong>Select ATC Drug Class to Audit:</strong></label>
+                                <select id="audit-class-select" class="custom-select select-lg">
+                                    <!-- Injected by JS -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Class Research Card (Dynamic Inspector output) -->
+                        <div class="glass-card class-research-display-card" id="class-research-display">
+                            <div class="crd-header">
+                                <span class="badge badge-purple" id="audit-cluster-badge">Resistant Hypertension</span>
+                                <h2 id="audit-group-title">C02F HYPOTENSIVE DUAL COMB.</h2>
+                            </div>
+                            
+                            <div class="crd-grid">
+                                <div class="crd-box">
+                                    <h5><i class="fa-solid fa-prescription text-purple"></i> Treatment Archetype</h5>
+                                    <p id="audit-archetype">Single-Pill Dual Action (ARB + CCB)</p>
+                                </div>
+                                <div class="crd-box">
+                                    <h5><i class="fa-solid fa-scale-balanced text-purple"></i> Indian Patent & Regulatory Landscape</h5>
+                                    <p id="audit-patent">Off-patent generic combinations; high volume adoption in India.</p>
+                                </div>
+                            </div>
+
+                            <div class="crd-section">
+                                <h5><i class="fa-solid fa-book-medical text-purple"></i> ESC / AHA / API Guideline Consensus</h5>
+                                <p id="audit-guidelines" class="crd-text-p">ESC/ESH & API 2024 guidelines recommend early initiation of dual fixed-dose combinations...</p>
+                            </div>
+
+                            <div class="crd-section">
+                                <h5><i class="fa-solid fa-flask text-purple"></i> Landmark Clinical Trial Evidence</h5>
+                                <p id="audit-trials" class="crd-text-p">CARTER Trial: Cilnidipine + Telmisartan significantly lowered proteinuria and pulse rate vs Amlodipine + Telmisartan.</p>
+                            </div>
+
+                            <div class="crd-section">
+                                <h5><i class="fa-solid fa-users-viewfinder text-purple"></i> Competitor Landscape Analysis</h5>
+                                <p id="audit-competitors" class="crd-text-p">Torrent Pharma (Clinal-T, Telma-LN), USV (Jalra, Myodura), Lupin lead...</p>
+                            </div>
+
+                            <div class="crd-section">
+                                <h5><i class="fa-solid fa-shield-halved text-purple"></i> CIPLA Right to Win Assessment</h5>
+                                <p id="audit-rtw" class="crd-text-p">HIGH. CIPLA's flagship brand Telma commands major prescriber trust...</p>
+                            </div>
+                        </div>
+
+                        <!-- Live Terminal Execution Console -->
+                        <div class="glass-card terminal-console-card">
+                            <div class="console-header">
+                                <span><i class="fa-solid fa-code text-purple"></i> Live Agent Pipeline Execution Stream</span>
+                                <span class="badge badge-blue">LOG_LEVEL: INFO</span>
+                            </div>
+                            <pre class="console-body" id="console-stream">
+[2026-08-07 15:17:49] [SYS_INIT] Loading dataset: Data Set_Ascend Season 4_2026.xlsx (Sheet: Cardiac)
+[2026-08-07 15:17:50] [DATA_INGEST] Ingested 7,452 rows. Identified 193 unique active cardiac molecules across 14 ATC Groups.
+[2026-08-07 15:17:51] [AGENT_RESEARCH] Executing live web/literature search loop across 14 ATC Drug Classes...
+[2026-08-07 15:17:51] [AGENT_RESEARCH] Merging ESC/AHA 2024 guidelines, CARTER/ORION trial proof points, and patent dates.
+[2026-08-07 15:18:12] [HYBRID_ENGINE] Merged Excel commercial metrics + secondary research into opportunity_spaces.json.
+[2026-08-07 15:18:12] [PIPELINE_COMPLETE] 100% of molecules scored, categorized into 4 Market Clusters. Agent ready for dynamic simulation.
+                            </pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 3: STRATEGIC PORTFOLIO -->
+                <section class="tab-content" id="tab-portfolio">
+                    <div class="portfolio-summary-card glass-card">
+                        <div class="portfolio-header-container">
+                            <div>
+                                <h3>CIPLA 4-Tier Strategic Roadmap</h3>
+                                <p class="card-desc">Portfolio allocation framework optimized for high-growth spaces and cash flow protection.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="portfolio-layout-grid">
+                            <!-- Visual Portfolio Chart (Doughnut Chart) -->
+                            <div class="portfolio-chart-box">
+                                <h4>Sales Contribution by Strategic Quadrant</h4>
+                                <div class="chart-container-wrapper-doughnut">
+                                    <canvas id="portfolioDistributionChart"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="portfolio-grid">
+                                <div class="portfolio-item-card build">
+                                    <div class="pi-header">
+                                        <span class="badge badge-purple">1. Build / Launch</span>
+                                    </div>
+                                    <h4>Bridge High-Growth Gaps</h4>
+                                    <p>Molecules with massive growth where CIPLA has less than 1% share today. Prioritize urgent launch.</p>
+                                    <ul class="pi-molecules" id="road-build"></ul>
+                                </div>
+                                
+                                <div class="portfolio-item-card grow">
+                                    <div class="pi-header">
+                                        <span class="badge badge-green">2. Double Down / Grow</span>
+                                    </div>
+                                    <h4>Maximize Existing Foothold</h4>
+                                    <p>Molecules growing >10% where CIPLA has a solid 1%-15% foothold. Scale marketing.</p>
+                                    <ul class="pi-molecules" id="road-grow"></ul>
+                                </div>
+                                
+                                <div class="portfolio-item-card defend">
+                                    <div class="pi-header">
+                                        <span class="badge badge-blue">3. Defend / Harvest</span>
+                                    </div>
+                                    <h4>Protect Mature Cash Cows</h4>
+                                    <p>Large, slow-growing mature segments where CIPLA holds a dominant share. Extract cash flow.</p>
+                                    <ul class="pi-molecules" id="road-defend"></ul>
+                                </div>
+                                
+                                <div class="portfolio-item-card seed">
+                                    <div class="pi-header">
+                                        <span class="badge badge-yellow">4. Seed / Partner</span>
+                                    </div>
+                                    <h4>In-license & Monitor</h4>
+                                    <p>Emerging molecules with extreme CAGR but small current size. Partner for distribution.</p>
+                                    <ul class="pi-molecules" id="road-seed"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 4: EXECUTIVE PITCH (STRICT 3-SLIDE CORE DECK + APPENDIX) -->
+                <section class="tab-content" id="tab-pitch">
+                    <div class="pitch-layout">
+                        <!-- Slide Selection -->
+                        <div class="pitch-tabs">
+                            <button class="pitch-tab-btn active" data-slide="1">
+                                <span class="p-num">SLIDE 1 (DELIVERABLE A)</span>
+                                <span>Agent Architecture & Formula</span>
+                            </button>
+                            <button class="pitch-tab-btn" data-slide="2">
+                                <span class="p-num">SLIDE 2 (DELIVERABLE B)</span>
+                                <span>Top Opportunities & Trade-Offs</span>
+                            </button>
+                            <button class="pitch-tab-btn" data-slide="3">
+                                <span class="p-num">SLIDE 3 (DELIVERABLE B)</span>
+                                <span>Gaps & 4-Tier Strategic Roadmap</span>
+                            </button>
+                            <button class="pitch-tab-btn" data-slide="4">
+                                <span class="p-num">APPENDIX</span>
+                                <span>External Data Sources</span>
+                            </button>
+                            
+                            <!-- Download Official PPTX Button -->
+                            <a href="CIPLA_DeliverableA_Mapped_Deck.pptx" download class="pptx-download-btn">
+                                <i class="fa-solid fa-file-powerpoint"></i>
+                                <span>Download Official PPTX</span>
+                            </a>
+                        </div>
+                        
+                        <!-- Slide Content Display -->
+                        <div class="pitch-slide-content glass-card">
+                            <!-- SLIDE 1 -->
+                            <div class="slide-view active" id="slide-1">
+                                <h3>Slide 1: AI Agent Architecture & Prioritization Framework (Deliverable A)</h3>
+                                <div class="slide-body">
+                                    <div class="slide-section">
+                                        <h5>COLUMN 1: AGENT OBJECTIVE & DIAGNOSIS (Problem & Scope)</h5>
+                                        <p class="highlight-text">Reverse CIPLA's Cardiac underperformance (3.98% growth vs. 12.18% market growth) by deploying an autonomous decision-support agent that synthesizes commercial historical data with real-time scientific/regulatory signals to prioritize 3–5 year high-growth opportunity spaces across 193 active molecules.</p>
+                                    </div>
+                                    <div class="slide-section">
+                                        <h5>COLUMN 2: DATA INGESTION & RATIONALE (Commercial vs External Ingestion)</h5>
+                                        <ul>
+                                            <li><strong>Commercial Ingestion:</strong> Ingests MAT sales, Constant-Price volume CAGRs (MAT CP), units, HHI, and brand footholds. Excludes monthly noise & pack-size SKU clutter.</li>
+                                            <li><strong>External Signals:</strong> Live web search for ESC/AHA/API guidelines, landmark trials (CARTER, ORION), and Indian patent dates.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="slide-section">
+                                        <h5>COLUMN 3: SCORING FORMULA & TRADE-OFFS (Weights & Trade-Off Resolution)</h5>
+                                        <p class="crd-text-p"><code>Priority Score = 0.40 * Attractiveness + 0.25 * HHI Competition + 0.35 * CIPLA RTW + Clinical Bonus (+1.2)</code></p>
+                                        <p class="text-muted" style="margin-top: 6px;">Resolves Scale vs Growth via MAT CP, Competition vs RTW via umbrella brands (Telma), and Attractiveness vs RTW via In-Licensing.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- SLIDE 2 -->
+                            <div class="slide-view" id="slide-2">
+                                <h3>Slide 2: Top Identified Opportunities & CIPLA Right to Win (Deliverable B - Q1 & Q2)</h3>
+                                <div class="slide-body">
+                                    <div class="slide-section">
+                                        <h5>1. Top 5 Agent-Scored Opportunities</h5>
+                                        <table class="pitch-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Molecule Name</th>
+                                                    <th>Market Size</th>
+                                                    <th>3-Yr CAGR</th>
+                                                    <th>CIPLA Share</th>
+                                                    <th>Agent Score</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Bisoprolol + Telmisartan</td>
+                                                    <td>₹138.8 Mn</td>
+                                                    <td class="text-green">+92.9%</td>
+                                                    <td>0.47%</td>
+                                                    <td><strong>8.93 / 10</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Ezetimibe + Rosuvastatin</td>
+                                                    <td>₹183.4 Mn</td>
+                                                    <td class="text-green">+91.5%</td>
+                                                    <td>0.54%</td>
+                                                    <td><strong>8.72 / 10</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cilnidipine + Telmisartan</td>
+                                                    <td>₹759.4 Mn</td>
+                                                    <td class="text-green">+26.6%</td>
+                                                    <td>0.26%</td>
+                                                    <td><strong>8.64 / 10</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cilnidipine + Metoprolol + Telmisartan</td>
+                                                    <td>₹160.8 Mn</td>
+                                                    <td class="text-green">+30.5%</td>
+                                                    <td>0.64%</td>
+                                                    <td><strong>8.25 / 10</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Saroglitazar</td>
+                                                    <td>₹537.6 Mn</td>
+                                                    <td class="text-green">+67.7%</td>
+                                                    <td>0.00%</td>
+                                                    <td><strong>8.07 / 10</strong></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="slide-section">
+                                        <h5>2. Trade-off Resolution (Top Active Selections)</h5>
+                                        <ul>
+                                            <li><strong>Cilnidipine + Telmisartan:</strong> Prioritized over plain Cilnidipine due to combination synergy, leveraging CIPLA's powerhouse brand <i>Telma</i> to bypass marketing build-up costs against Torrent's <i>Clinal-T</i>.</li>
+                                            <li><strong>Ezetimibe + Rosuvastatin:</strong> Prioritized due to ESC dyslipidemia guidelines mandating aggressive LDL-C lowering (<55 mg/dL), projecting 5x market expansion.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- SLIDE 3 -->
+                            <div class="slide-view" id="slide-3">
+                                <h3>Slide 3: Underpenetrated Gaps & 4-Tier Strategic Roadmap (Deliverable B - Q3 & Q4)</h3>
+                                <div class="slide-body">
+                                    <div class="slide-section">
+                                        <h5>1. High-Potential Underpenetrated Gaps (<1% CIPLA Share)</h5>
+                                        <ul>
+                                            <li><strong>Cilnidipine + Telmisartan (0.26% share):</strong> Urgent generic umbrella launch under <i>Telma-LN</i>. Highlight pedal-edema relief over Amlodipine.</li>
+                                            <li><strong>Ezetimibe + Rosuvastatin (0.54% share):</strong> Launch FDC combination <i>Rosulip-EZ</i>. Target cardiologist medical education.</li>
+                                            <li><strong>Saroglitazar (0.00% share):</strong> In-license or co-market with Zydus Cadila to capture diabetic dyslipidemia hyper-growth (67.7% CAGR) without heavy R&D clinical trial costs.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="slide-section">
+                                        <h5>2. CIPLA 4-Tier Strategic Allocation Roadmap</h5>
+                                        <div class="crd-grid" style="margin-top: 10px;">
+                                            <div class="crd-box">
+                                                <h5><i class="fa-solid fa-rocket text-purple"></i> 1. BUILD / LAUNCH</h5>
+                                                <p>Cilnidipine + Telmisartan, Ezetimibe + Rosuvastatin, Bisoprolol + Telmisartan. Urgent FDC umbrella launches.</p>
+                                            </div>
+                                            <div class="crd-box">
+                                                <h5><i class="fa-solid fa-chart-line text-green"></i> 2. DOUBLE DOWN / GROW</h5>
+                                                <p>Amlodipine + Telmisartan, Plain Telmisartan (₹1,437 Mn market). Scale distribution and sales force coverage.</p>
+                                            </div>
+                                            <div class="crd-box">
+                                                <h5><i class="fa-solid fa-shield text-purple"></i> 3. DEFEND / HARVEST</h5>
+                                                <p>Amlodipine + Atenolol (13.7% share), Fenofibrate (28.6% share). Harvest cash flow to fund new launches.</p>
+                                            </div>
+                                            <div class="crd-box">
+                                                <h5><i class="fa-solid fa-handshake text-yellow"></i> 4. SEED / PARTNER</h5>
+                                                <p>Saroglitazar (67.7% CAGR), Inclisiran (415.5% CAGR). In-license and co-market with innovators.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SLIDE 4: APPENDIX -->
+                            <div class="slide-view" id="slide-4">
+                                <h3>Appendix: External Secondary Research & Data Citations</h3>
+                                <div class="slide-body">
+                                    <div class="slide-section">
+                                        <h5>1. Cardiology Clinical Guidelines</h5>
+                                        <ul>
+                                            <li><strong>ESC/EAS 2019 & 2023 Focused Update:</strong> European Heart Journal (LDL-C targets <55 mg/dL).</li>
+                                            <li><strong>ESC/ESH 2024 Hypertension Guidelines:</strong> Recommending early dual single-pill combinations (FDCs).</li>
+                                            <li><strong>API 2024 Guidelines:</strong> Association of Physicians of India Expert Consensus on Diabetic Hypertension.</li>
+                                        </ul>
+                                    </div>
+                                    <div class="slide-section">
+                                        <h5>2. Landmark Clinical Trials</h5>
+                                        <ul>
+                                            <li><strong>CARTER Trial:</strong> Kidney Int (Cilnidipine + Telmisartan vs Amlodipine + Telmisartan - pedal edema & renal protection).</li>
+                                            <li><strong>IMPROVE-IT Trial:</strong> NEJM (Ezetimibe added to Statin - 6.4% MACE reduction).</li>
+                                            <li><strong>ORION-10/11 Trials:</strong> NEJM 2020 (Inclisiran siRNA PCSK9 silencer - 52% sustained LDL-C reduction).</li>
+                                        </ul>
+                                    </div>
+                                    <div class="slide-section">
+                                        <h5>3. Regulatory & Commercial Sources</h5>
+                                        <ul>
+                                            <li><strong>Indian Patent Office (IPO) Database:</strong> IPIR generic launch dates for active combination APIs.</li>
+                                            <li><strong>Pharmarack Commercial Dataset:</strong> MAT Feb 2024 – MAT Feb 2026 Cardiac Dataset (7,452 rows).</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+            </div>
+        </main>
+    </div>
+
+    <!-- Custom Script -->
+    <script src="app.js"></script>
+</body>
+</html>
