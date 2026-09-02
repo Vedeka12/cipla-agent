@@ -1,6 +1,6 @@
 import React from 'react';
 import { Article } from '../types/news';
-import { ExternalLink, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { ExternalLink, ThumbsUp, ThumbsDown, Lock, Unlock } from 'lucide-react';
 
 interface ArticleCardProps {
   article: Article;
@@ -29,7 +29,18 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
     <article className="article-card">
       <div className="card-top-row">
         <span className="article-number">{formattedIndex}</span>
-        <span className="topic-badge">{article.topic}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {article.isPaywalled ? (
+            <span className="topic-badge" style={{ borderColor: 'rgba(244, 63, 94, 0.4)', color: '#f43f5e', background: 'rgba(244, 63, 94, 0.08)' }}>
+              <Lock size={10} style={{ display: 'inline', marginRight: '3px' }} /> Subscription
+            </span>
+          ) : (
+            <span className="topic-badge" style={{ borderColor: 'rgba(16, 185, 129, 0.4)', color: '#10b981', background: 'rgba(16, 185, 129, 0.08)' }}>
+              <Unlock size={10} style={{ display: 'inline', marginRight: '3px' }} /> Open Access
+            </span>
+          )}
+          <span className="topic-badge">{article.topic}</span>
+        </div>
       </div>
 
       <h2 className="article-headline">{article.title}</h2>

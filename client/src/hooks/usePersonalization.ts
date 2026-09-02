@@ -7,6 +7,7 @@ const DEFAULT_PREFERENCES: UserPreferences = {
   explicitTopics: [],
   freeTextInterests: [],
   topicWeights: {},
+  marketRegion: 'global',
   feedbackHistory: [],
 };
 
@@ -15,7 +16,11 @@ export function usePersonalization() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        return {
+          ...DEFAULT_PREFERENCES,
+          ...parsed,
+        };
       }
     } catch (e) {
       console.error('Failed to load preferences from localStorage:', e);
@@ -30,6 +35,13 @@ export function usePersonalization() {
       console.error('Failed to save preferences to localStorage:', e);
     }
   }, [preferences]);
+
+  const setMarketRegion = (region: 'global' | 'india') => {
+    setPreferences(prev => ({
+      ...prev,
+      marketRegion: region,
+    }));
+  };
 
   // Saves explicit topics & free text interests
   const saveInterests = (explicitTopics: string[], freeTextInterests: string[]) => {
@@ -111,6 +123,7 @@ export function usePersonalization() {
     preferences,
     hasOnboarded: preferences.explicitTopics.length > 0 || preferences.freeTextInterests.length > 0,
     saveInterests,
+    setMarketRegion,
     recordFeedback,
     resetPersonalization,
     resetAll,

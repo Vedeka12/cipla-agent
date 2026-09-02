@@ -6,7 +6,7 @@ dotenv.config();
 /**
  * Fetches real news candidate articles from NewsAPI.org
  */
-export async function fetchNewsFromApi(explicitTopics = [], freeTextInterests = []) {
+export async function fetchNewsFromApi(explicitTopics = [], freeTextInterests = [], marketRegion = "global") {
   const apiKey = process.env.NEWS_API_KEY;
 
   if (!apiKey || apiKey.trim() === "" || apiKey === "your_key_here") {
@@ -18,6 +18,9 @@ export async function fetchNewsFromApi(explicitTopics = [], freeTextInterests = 
 
   // Construct search query from explicit topics & free text interests
   const expandedKeywords = getExpandedKeywords(explicitTopics, freeTextInterests);
+  if (marketRegion === "india") {
+    expandedKeywords.unshift("India");
+  }
   
   let searchQuery = "";
   if (expandedKeywords.length > 0) {
@@ -25,8 +28,9 @@ export async function fetchNewsFromApi(explicitTopics = [], freeTextInterests = 
     const topTerms = expandedKeywords.slice(0, 8).map(term => `"${term}"`);
     searchQuery = topTerms.join(" OR ");
   } else {
-    searchQuery = "business OR technology OR market OR strategy";
+    searchQuery = marketRegion === "india" ? "India business OR India market" : "business OR technology OR market OR strategy";
   }
+
 
   // Calculate past 7 days date
   const sevenDaysAgo = new Date();

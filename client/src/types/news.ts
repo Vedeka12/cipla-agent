@@ -11,6 +11,7 @@ export interface Article {
   topic: string;
   matchedTopics: string[];
   relevanceExplanation: string;
+  isPaywalled?: boolean;
   rawScore: number;
   scoreBreakdown?: {
     interestRelevance: number;
@@ -26,6 +27,7 @@ export interface UserPreferences {
   explicitTopics: string[];
   freeTextInterests: string[];
   topicWeights: Record<string, number>;
+  marketRegion: 'global' | 'india';
   feedbackHistory: FeedbackItem[];
 }
 

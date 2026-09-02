@@ -5,10 +5,10 @@ class SimpleCache {
     this.cache = new Map();
   }
 
-  generateKey(explicitTopics = [], freeTextInterests = []) {
+  generateKey(explicitTopics = [], freeTextInterests = [], marketRegion = "global") {
     const sortedTopics = [...explicitTopics].map(t => t.toLowerCase()).sort().join(',');
     const sortedFree = [...freeTextInterests].map(f => f.trim().toLowerCase()).sort().join(',');
-    return `news_cache:${sortedTopics}|${sortedFree}`;
+    return `news_cache:${marketRegion}|${sortedTopics}|${sortedFree}`;
   }
 
   get(key) {

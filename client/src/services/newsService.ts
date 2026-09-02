@@ -9,6 +9,7 @@ export const newsService = {
     freeTextInterests: string[],
     topicWeights: Record<string, number>,
     excludeUrls: string[],
+    marketRegion: 'global' | 'india' = 'global',
     bypassCache: boolean = false
   ): Promise<NewsApiResponse> {
     const response = await fetch('/api/news', {
@@ -21,6 +22,7 @@ export const newsService = {
         freeTextInterests,
         topicWeights,
         excludeUrls,
+        marketRegion,
         bypassCache,
       }),
     });

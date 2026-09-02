@@ -8,14 +8,29 @@ const HIGH_IMPORTANCE_TERMS = [
   "profit", "valuation", "antitrust", "lawsuit", "sanction", "bipartisan"
 ];
 
+// Known subscription paywall domains
+const PAYWALL_SOURCES = [
+  "the wall street journal", "wsj", "financial times", "bloomberg",
+  "harvard business review", "hbr", "the economist", "barron's",
+  "the new york times", "nyt", "nikkei asia", "the information", "business insider"
+];
+
+// Top Indian media outlets
+const INDIAN_SOURCES = [
+  "the economic times", "economic times", "livemint", "mint", "business standard",
+  "financial express", "the hindu", "ndtv", "times of india", "moneycontrol",
+  "inc42", "yourstory", "republic world", "business today", "deccan herald"
+];
+
 // Tiered source quality scoring table (MVP heuristic)
 const TIER1_SOURCES = [
   "reuters", "bloomberg", "financial times", "the wall street journal", "wsj",
   "techcrunch", "the verge", "forbes", "cnbc", "harvard business review", "hbr",
   "bbc news", "ars technica", "wired", "associated press", "ap news",
   "the new york times", "nyt", "fortune", "economist", "business insider",
-  "nikkei asia", "barron's", "marketwatch"
+  "nikkei asia", "barron's", "marketwatch", ...INDIAN_SOURCES
 ];
+
 
 function calculateInterestRelevance(text, explicitTopics, freeTextInterests) {
   const lowerText = text.toLowerCase();
@@ -141,10 +156,24 @@ function generateRelevanceExplanation(matchedTopics, matchedCustom, signals) {
   return `Recommended based on weekly industry relevance and source coverage.`;
 }
 
+function checkIsPaywalled(url = "", sourceName = "") {
+  const target = `${url} ${sourceName}`.toLowerCase();
+  return PAYWALL_SOURCES.some(pw => target.includes(pw));
+}
+
+function calculateRegionBoost(fullText, sourceName, marketRegion = "global") {
+  if (marketRegion !== "india") return 0;
+
+  const cleanText = `${fullText} ${sourceName}`.toLowerCase();
+  const indianTerms = ["india", "indian", "rbi", "mumbai", "delhi", "bengaluru", "bangalore", "sebi", "nifty", "sensex", "rupee", ...INDIAN_SOURCES];
+  const hasMatch = indianTerms.some(term => cleanText.includes(term));
+  return hasMatch ? 0.25 : 0;
+}
+
 /**
  * Ranks candidates using explainable 5-factor scoring model
  */
-export function rankArticles(articles = [], explicitTopics = [], freeTextInterests = [], topicWeights = {}) {
+export function rankArticles(articles = [], explicitTopics = [], freeTextInterests = [], topicWeights = {}, marketRegion = "global") {
   return articles.map(article => {
     const fullText = `${article.title || ""} ${article.description || ""}`;
     
@@ -167,22 +196,28 @@ export function rankArticles(articles = [], explicitTopics = [], freeTextInteres
     // Factor 5: Source Quality (10%)
     const sourceQualityScore = calculateSourceQuality(article.source?.name);
 
+    // Region boost for India filter
+    const regionBoost = calculateRegionBoost(fullText, article.source?.name, marketRegion);
+
     // Final weighted score
     const finalScore = 
       (interestScore * 0.40) +
       (preferenceScore * 0.20) +
       (recencyScore * 0.15) +
       (importanceScore * 0.15) +
-      (sourceQualityScore * 0.10);
+      (sourceQualityScore * 0.10) +
+      regionBoost;
 
     const primaryTopic = matchedTopics[0] || matchedCustom[0] || "Industry News";
     const relevanceExplanation = generateRelevanceExplanation(matchedTopics, matchedCustom, signals);
+    const isPaywalled = checkIsPaywalled(article.url, article.source?.name);
 
     return {
       ...article,
       topic: primaryTopic,
       matchedTopics: [...matchedTopics, ...matchedCustom],
       relevanceExplanation,
+      isPaywalled,
       rawScore: finalScore,
       scoreBreakdown: {
         interestRelevance: Math.round(interestScore * 100),
@@ -195,3 +230,4 @@ export function rankArticles(articles = [], explicitTopics = [], freeTextInteres
     };
   }).sort((a, b) => b.rawScore - a.rawScore);
 }
+

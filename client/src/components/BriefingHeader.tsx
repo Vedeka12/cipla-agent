@@ -4,9 +4,11 @@ import { RefreshCw, RotateCcw, SlidersHorizontal } from 'lucide-react';
 interface BriefingHeaderProps {
   explicitTopics: string[];
   freeTextInterests: string[];
+  marketRegion: 'global' | 'india';
   lastRefreshed: string | null;
   isRefreshing: boolean;
   onRefresh: () => void;
+  onRegionChange: (region: 'global' | 'india') => void;
   onResetPersonalization: () => void;
   onEditPreferences: () => void;
 }
@@ -14,9 +16,11 @@ interface BriefingHeaderProps {
 export const BriefingHeader: React.FC<BriefingHeaderProps> = ({
   explicitTopics,
   freeTextInterests,
+  marketRegion,
   lastRefreshed,
   isRefreshing,
   onRefresh,
+  onRegionChange,
   onResetPersonalization,
   onEditPreferences,
 }) => {
@@ -35,6 +39,36 @@ export const BriefingHeader: React.FC<BriefingHeaderProps> = ({
         </div>
 
         <div className="header-actions">
+          {/* Market Region Selector */}
+          <div style={{ display: 'inline-flex', background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '6px', padding: '2px' }}>
+            <button
+              type="button"
+              className="btn-secondary"
+              style={{
+                border: 'none',
+                background: marketRegion === 'global' ? 'var(--border-color-light)' : 'transparent',
+                padding: '0.35rem 0.75rem',
+                fontSize: '0.8125rem'
+              }}
+              onClick={() => onRegionChange('global')}
+            >
+              🌍 Global
+            </button>
+            <button
+              type="button"
+              className="btn-secondary"
+              style={{
+                border: 'none',
+                background: marketRegion === 'india' ? 'var(--border-color-light)' : 'transparent',
+                padding: '0.35rem 0.75rem',
+                fontSize: '0.8125rem'
+              }}
+              onClick={() => onRegionChange('india')}
+            >
+              🇮🇳 India Focus
+            </button>
+          </div>
+
           <button
             className="btn-secondary"
             onClick={onRefresh}

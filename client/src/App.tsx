@@ -13,6 +13,7 @@ export function App() {
     preferences,
     hasOnboarded,
     saveInterests,
+    setMarketRegion,
     recordFeedback,
     resetPersonalization,
     ratedUrls,
@@ -41,6 +42,7 @@ export function App() {
         preferences.freeTextInterests,
         preferences.topicWeights,
         ratedUrls,
+        preferences.marketRegion,
         bypassCache
       );
 
@@ -58,15 +60,20 @@ export function App() {
     preferences.explicitTopics,
     preferences.freeTextInterests,
     preferences.topicWeights,
+    preferences.marketRegion,
     ratedUrls,
   ]);
 
-  // Fetch articles on initial onboard completion or interest update
+  // Fetch articles on initial onboard completion, region change, or interest update
   useEffect(() => {
     if (hasOnboarded && !isEditingInterests) {
       fetchRecommendations(false);
     }
-  }, [hasOnboarded, isEditingInterests]);
+  }, [hasOnboarded, isEditingInterests, preferences.marketRegion]);
+
+  const handleRegionChange = (region: 'global' | 'india') => {
+    setMarketRegion(region);
+  };
 
   const handleOnboardingComplete = (explicit: string[], freeText: string[]) => {
     saveInterests(explicit, freeText);
@@ -103,9 +110,11 @@ export function App() {
       <BriefingHeader
         explicitTopics={preferences.explicitTopics}
         freeTextInterests={preferences.freeTextInterests}
+        marketRegion={preferences.marketRegion}
         lastRefreshed={lastRefreshed}
         isRefreshing={loading}
         onRefresh={() => fetchRecommendations(true)}
+        onRegionChange={handleRegionChange}
         onResetPersonalization={() => setIsResetModalOpen(true)}
         onEditPreferences={() => setIsEditingInterests(true)}
       />

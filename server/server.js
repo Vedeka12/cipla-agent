@@ -23,10 +23,11 @@ app.post("/api/news", async (req, res) => {
       freeTextInterests = [],
       topicWeights = {},
       excludeUrls = [],
+      marketRegion = "global",
       bypassCache = false
     } = req.body || {};
 
-    const cacheKey = newsCache.generateKey(explicitTopics, freeTextInterests);
+    const cacheKey = newsCache.generateKey(explicitTopics, freeTextInterests, marketRegion);
 
     let candidateArticles = null;
     let isFromCache = false;
@@ -44,7 +45,7 @@ app.post("/api/news", async (req, res) => {
 
     // If cache miss or refresh requested, fetch live news from NewsAPI
     if (!candidateArticles) {
-      candidateArticles = await fetchNewsFromApi(explicitTopics, freeTextInterests);
+      candidateArticles = await fetchNewsFromApi(explicitTopics, freeTextInterests, marketRegion);
       newsCache.set(cacheKey, candidateArticles);
       cachedAt = Date.now();
     }
@@ -58,7 +59,8 @@ app.post("/api/news", async (req, res) => {
       unratedCandidates,
       explicitTopics,
       freeTextInterests,
-      topicWeights
+      topicWeights,
+      marketRegion
     );
 
     // Deduplicate top-scoring articles to avoid covering same event twice
