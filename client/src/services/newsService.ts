@@ -27,6 +27,15 @@ export const newsService = {
       }),
     });
 
+    const contentType = response.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      const text = await response.text();
+      const error = new Error(text.includes('Add your NewsAPI key') ? text : `Server Error (${response.status}): Could not parse response.`);
+      (error as any).code = text.includes('MISSING_API_KEY') ? 'MISSING_API_KEY' : 'SERVER_ERROR';
+      (error as any).status = response.status;
+      throw error;
+    }
+
     const data = await response.json();
 
     if (!response.ok || !data.success) {
